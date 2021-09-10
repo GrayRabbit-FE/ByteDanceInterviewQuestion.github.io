@@ -274,7 +274,7 @@
             };
             for (let i = 0; i < count; i++) {
                 let avg = Number(money) / Number(count);
-                let piece = count - i == 1 ? (Math.random() * 2 * avg + 0.01).toFixed(2) : Number(money).toFixed(2);
+                let piece = count - i > 1 ? (Math.random() * 2 * avg + 0.01).toFixed(2) : Number(money).toFixed(2);
                 res.result.push(piece);
                 if (piece > res.result[res.maxIndex])
                     res.maxIndex = i;
