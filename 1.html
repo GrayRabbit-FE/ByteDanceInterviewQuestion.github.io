@@ -1,0 +1,286 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+
+    <div id="red-bag">
+        <div id="firstpage">
+            <h1>红包模拟器</h1>
+            <div id="input">
+                <div id="input-head">
+                    <div>红包个数：</div>
+                    <div>总金额：</div>
+                </div>
+                <div id="input-body">
+                    <div><input type="number" id="count-input" min="1" step="1">个</div>
+                    <div><input type="number" id="money-input" min="0.1" step="0.1">元</div>
+                </div>
+            </div>
+            <button id="processbtn">发红包</button>
+        </div>
+        <div id="processpage">
+            <div id="bag-body">
+                <div id="bag-head"></div>
+                <img src="http://s3a.pstatp.com/cg_growth/resource/boilerplate/images/redpacket/avatar.png" id="head"></img>
+                <div id="bag-body-text1">
+                    <div><span style="color:#faf8f2;font-size:20px"><strong>JScoder</strong></span></div>
+                    <div><span style="color:#9c8f8b">给您发了一个红包</span></div>
+                    <div><span style="color:#faf8f2">恭喜发财 大吉大利</span></div>
+                    <div id="btn"> 拆红包</div>
+                </div>
+                <div id="bag-body-text2">
+                    <div id="money-count" style="height:40px;color:#faf8f2;font-size:20px"></div>
+                    <div style="color:#faf8f2;font-size:15px">红包领取榜</div>
+                    <ul id="money-rank">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        #red-bag {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        #btn {
+            background-color: #fca550;
+            width: 90px;
+            height: 90px;
+            margin: 20px;
+            border-radius: 50px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            animation: myroate 2s infinite;
+        }
+        
+        #bag-head {
+            position: absolute;
+            height: 70%;
+            width: 100%;
+            background-color: #c14e3e;
+            top: 0;
+            border-radius: 20px 20px 15% 15%;
+        }
+        
+        #bag-head-open {
+            position: absolute;
+            height: 30%;
+            width: 100%;
+            background-color: #c14e3e;
+            top: 0;
+            border-radius: 20px 20px 15% 15%;
+            animation: open 1s;
+        }
+        
+        #bag-body-text1 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 30%;
+        }
+        
+        #bag-body-text1 div {
+            margin: 10px;
+        }
+        
+        #bag-body-text2 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 30%;
+        }
+        
+        #processpage {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.3);
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #head {
+            width: 80px;
+            height: 80px;
+            background-color: #329ccd;
+            border-radius: 50%;
+            color: #000;
+            position: absolute;
+            top: 6%;
+        }
+        
+        #bag-body {
+            width: 80%;
+            height: 70vh;
+            background-color: #a8413c;
+            border-radius: 20px;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        #firstpage {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #firstpage .title {
+            display: block;
+            float: left;
+        }
+        
+        #input {
+            display: flex;
+            flex-direction: row;
+            margin: 60px;
+        }
+        
+        #input-head div {
+            justify-content: space-between;
+            width: 90px;
+        }
+        
+        #input-body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #firstpage button {
+            color: white;
+            background-color: #329ccd;
+            width: 180px;
+            height: 30px;
+        }
+        
+        #money-rank {
+            margin: 20px;
+            background-color: #ae493b;
+            border: 4px solid #bb5443;
+            border-radius: 5px;
+            width: 40vw;
+            max-width: 300px;
+        }
+        
+        .winner::after {
+            content: "   手气最佳";
+            color: #f8c460;
+            margin-left: px;
+        }
+        
+        li {
+            color: white;
+            list-style: none;
+        }
+        
+        @keyframes myroate {
+            from {
+                transform: rotateY(0);
+            }
+            60% {
+                transform: rotateY(360deg);
+            }
+            to {
+                transform: rotateY(360deg);
+            }
+        }
+        
+        @keyframes open {
+            from {
+                height: 70%;
+            }
+            to {
+                height: 30%;
+            }
+        }
+    </style>
+    <script>
+        var redBag = {
+            count: 0,
+            money: 0
+        }
+
+        document.querySelector("#processpage").style = "display:none";
+
+        redBag.count = document.querySelector("#count-input").value = 1;
+        redBag.money = document.querySelector("#money-input").value = 0.1;
+
+        let processbtn = document.querySelector("#processbtn");
+        processbtn.addEventListener("click", () => {
+            document.querySelector("#processpage").style = "display:flex;"
+            document.querySelector("#bag-body-text1").style = "display:flex";
+            redBag.count = document.querySelector("#count-input").value;
+            redBag.money = document.querySelector("#money-input").value;
+            document.querySelector("#bag-body-text2").style = "display:none";
+        });
+
+        let openBtn = document.querySelector("#btn");
+        openBtn.addEventListener("click", open);
+
+        function open() {
+            let bagHead = document.querySelector("#bag-head");
+            console.log(bagHead);
+            bagHead.id = "bag-head-open";
+            document.querySelector("#bag-body-text1").style = "display:none";
+            setTimeout(() => {
+                document.querySelector("#bag-body-text2").style = "display:flex";
+            }, 800);
+            let ul = document.querySelector("#money-rank");
+            document.querySelector("#money-count").innerHTML = Number(redBag.money).toFixed(2);
+            let pieces = getMoney(redBag.count, redBag.money);
+            for (let i = 0; i < redBag.count; i++) {
+                let li = document.createElement('li');
+                let x = i + 1;
+                if (i == pieces.maxIndex) li.className = "winner";
+                li.innerHTML = "用户" + x + ":  " + pieces.result[i] + "  ";
+                ul.appendChild(li);
+            }
+        }
+
+        function getMoney(count, money) {
+            let res = {
+                result: [],
+                maxIndex: 0
+            };
+            for (let i = 0; i < count; i++) {
+                let avg = Number(money) / Number(count);
+                let piece = (Math.random() * 2 * avg + 0.01).toFixed(2);
+                res.result.push(piece);
+                if (piece > res.result[res.maxIndex])
+                    res.maxIndex = i;
+                money -= piece;
+            }
+            return res;
+        }
+    </script>
+</body>
+
+</html>
